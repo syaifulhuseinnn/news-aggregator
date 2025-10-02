@@ -6,13 +6,13 @@ import fetchGuardian from "./aggregator/guardian.ts";
 async function ingestOnce() {
   const batches = await Promise.all([fetchNewsApi(), fetchGuardian()]);
   const docs = batches.flat();
-  // for (const doc of docs) {
-  //   await Article.updateOne(
-  //     { contentHash: doc.contentHash },
-  //     { $set: doc, $setOnInsert: { fetchedAt: new Date() } },
-  //     { upsert: true },
-  //   );
-  // }
+  for (const doc of docs) {
+    await Article.updateOne(
+      { contentHash: doc.contentHash },
+      { $set: doc, $setOnInsert: { fetchedAt: new Date() } },
+      { upsert: true },
+    );
+  }
 
   return { count: `Fetched ${docs.length} articles`, at: new Date() };
 }

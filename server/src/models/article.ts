@@ -16,8 +16,13 @@ const ArticleSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+ArticleSchema.index({ title: "text", summary: "text", authors: "text" });
 
 export type ArticleDoc = mongoose.InferSchemaType<typeof ArticleSchema> & {
   _id: mongoose.Types.ObjectId;
 };
 export const Article = mongoose.model("Article", ArticleSchema);
+
+Article.createIndexes().catch((err) => {
+  console.error("Error creating indexes for Article model:", err);
+});

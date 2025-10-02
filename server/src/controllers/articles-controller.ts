@@ -20,3 +20,12 @@ export async function getArticles(req: Request, res: Response) {
   res.setHeader("X-Total-Count", total);
   res.json(data);
 }
+
+export async function getArticleById(req: Request, res: Response) {
+  const id = req.params.id;
+  const article = await Article.findById(id).lean();
+  if (!article) {
+    return res.status(404).json({ message: "Article not found" });
+  }
+  res.json(article);
+}

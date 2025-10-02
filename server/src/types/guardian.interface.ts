@@ -24,6 +24,7 @@ export interface Result {
   webUrl: string;
   apiUrl: string;
   fields: Fields;
+  references: Reference[];
   isHosted: boolean;
   pillarId: string;
   pillarName: string;
@@ -32,4 +33,9 @@ export interface Result {
 export interface Fields {
   trailText: string;
   thumbnail: string;
+}
+
+export interface Reference {
+  id: string;
+  type: string;
 }
