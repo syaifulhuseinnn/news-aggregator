@@ -31,6 +31,7 @@ export default async function fetchNewsApi() {
       source: "newsapi",
       title: article.title,
       summary: article.description ?? "",
+      content: article.content ?? "",
       url: article.url,
       imageUrl: article.urlToImage ?? "",
       publishedAt: new Date(article.publishedAt),

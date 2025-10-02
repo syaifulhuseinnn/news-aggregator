@@ -21,6 +21,7 @@ export default async function fetchGuardian() {
       source: "guardian",
       title: article.webTitle,
       summary: article.fields.trailText ?? "",
+      content: article.fields.body ?? "",
       url: article.webUrl,
       imageUrl: article.fields.thumbnail ?? "",
       publishedAt: new Date(article.webPublicationDate),

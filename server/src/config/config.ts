@@ -17,7 +17,7 @@ const API_KEYS = {
 
 const API_URL = {
   NEWSAPI: `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEYS.NEWSAPI}`,
-  GUARDIAN: `https://content.guardianapis.com/search?order-by=newest&show-fields=trailText,thumbnail&show-references=author&reference-type=author&api-key=${API_KEYS.GUARDIAN}`,
+  GUARDIAN: `https://content.guardianapis.com/search?order-by=newest&show-fields=trailText,thumbnail,body&show-references=author&reference-type=author&api-key=${API_KEYS.GUARDIAN}`,
 };
 
 const MONGODB_URI = process.env.MONGODB_URI || "";

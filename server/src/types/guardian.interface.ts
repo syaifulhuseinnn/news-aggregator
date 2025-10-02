@@ -33,6 +33,7 @@ export interface Result {
 export interface Fields {
   trailText: string;
   thumbnail: string;
+  body: string;
 }
 
 export interface Reference {
