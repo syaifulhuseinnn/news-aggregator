@@ -3,8 +3,19 @@ import fetchNewsApi from "./aggregator/newsapi.ts";
 import { Article } from "../models/article.ts";
 import fetchGuardian from "./aggregator/guardian.ts";
 
-async function ingestOnce() {
-  const batches = await Promise.all([fetchNewsApi(), fetchGuardian()]);
+export async function ingestOnce() {
+  const promises = [
+    fetchNewsApi().catch((err) => {
+      console.error("NewsAPI fetch failed:", err);
+      return [];
+    }),
+    fetchGuardian().catch((err) => {
+      console.error("Guardian fetch failed:", err);
+      return [];
+    }),
+  ];
+
+  const batches = await Promise.all(promises);
   const docs = batches.flat();
   for (const doc of docs) {
     await Article.updateOne(
@@ -17,15 +28,18 @@ async function ingestOnce() {
   return { count: `Fetched ${docs.length} articles`, at: new Date() };
 }
 
-ingestOnce()
-  .then((res) => console.log(res))
-  .catch(console.error);
-
-cron.schedule("*/30 * * * *", () => {
-  console.log("Running a task every 30 minutes");
+// Only run these in non-test environment
+if (process.env.NODE_ENV !== "test") {
   ingestOnce()
     .then((res) => console.log(res))
     .catch(console.error);
-});
+
+  cron.schedule("*/30 * * * *", () => {
+    console.log("Running a task every 30 minutes");
+    ingestOnce()
+      .then((res) => console.log(res))
+      .catch(console.error);
+  });
+}
 
 export default ingestOnce;

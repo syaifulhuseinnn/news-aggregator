@@ -6,6 +6,7 @@ import type {
   GuardianResponse,
   Reference,
 } from "../../types/guardian.interface.ts";
+import { withBackoff } from "../../utils/backoff.ts";
 
 export default async function fetchGuardian() {
   const normalizeAuthors = (references: Reference[]) => {
@@ -15,7 +16,9 @@ export default async function fetchGuardian() {
     return authors;
   };
   try {
-    const response = await axios.get<GuardianResponse>(API_URL.GUARDIAN);
+    const response = await withBackoff(() =>
+      axios.get<GuardianResponse>(API_URL.GUARDIAN),
+    );
     const articles = response.data.response.results;
     return articles.map((article) => ({
       source: "guardian",

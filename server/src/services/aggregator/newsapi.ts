@@ -3,6 +3,7 @@ import { API_URL } from "../../config/config.ts";
 import type { NEWSAPIResponse } from "../../types/newsapi.interface.ts";
 import sha1 from "sha1";
 import { normalizeTitle } from "../../utils/normalize.ts";
+import { withBackoff } from "../../utils/backoff.ts";
 
 export default async function fetchNewsApi() {
   const categories = [
@@ -18,7 +19,7 @@ export default async function fetchNewsApi() {
   );
 
   try {
-    const responses = await Promise.all(urls);
+    const responses = await withBackoff(() => Promise.all(urls));
     // Attach category to each article based on the order of categories and responses
     const articlesWithCategory = responses.flatMap((response, idx) =>
       response.data.articles.map((article) => ({
