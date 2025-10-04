@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import articlesRouter from "./routes/articles.ts";
-import categoriesRouter from "./routes/categories.ts";
-import "./services/ingest.ts";
+import articlesRouter from "./routes/articles.js";
+import categoriesRouter from "./routes/categories.js";
+import "./services/ingest.js";
 
 const app = express();
 

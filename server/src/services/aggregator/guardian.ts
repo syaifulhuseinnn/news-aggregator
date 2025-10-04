@@ -1,12 +1,12 @@
 import axios from "axios";
-import { API_URL } from "../../config/config.ts";
+import { API_URL } from "../../config/config.js";
 import sha1 from "sha1";
-import { normalizeTitle } from "../../utils/normalize.ts";
+import { normalizeTitle } from "../../utils/normalize.js";
 import type {
   GuardianResponse,
   Reference,
-} from "../../types/guardian.interface.ts";
-import { withBackoff } from "../../utils/backoff.ts";
+} from "../../types/guardian.interface.js";
+import { withBackoff } from "../../utils/backoff.js";
 
 export default async function fetchGuardian() {
   const normalizeAuthors = (references: Reference[]) => {

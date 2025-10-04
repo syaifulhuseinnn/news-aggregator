@@ -57,7 +57,7 @@ function App() {
 	}
 
 	const total = data?.total ?? 0;
-	const maxPage = Math.max(1, Math.ceil(total / 10));
+	// const maxPage = Math.max(1, Math.ceil(total / 10));
 
 	return (
 		<>

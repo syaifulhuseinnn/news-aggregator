@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_URL } from "../../config/config.ts";
-import type { NEWSAPIResponse } from "../../types/newsapi.interface.ts";
+import { API_URL } from "../../config/config.js";
+import type { NEWSAPIResponse } from "../../types/newsapi.interface.js";
 import sha1 from "sha1";
-import { normalizeTitle } from "../../utils/normalize.ts";
-import { withBackoff } from "../../utils/backoff.ts";
+import { normalizeTitle } from "../../utils/normalize.js";
+import { withBackoff } from "../../utils/backoff.js";
 
 export default async function fetchNewsApi() {
   const categories = [

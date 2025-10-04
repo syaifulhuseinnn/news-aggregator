@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { MockInstance } from "vitest";
 import type { Request, Response } from "express";
-import { getArticles, getArticleById } from "../articles-controller.ts";
-import { Article } from "../../models/article.ts";
+import { getArticles, getArticleById } from "../articles-controller.js";
+import { Article } from "../../models/article.js";
 
 // Mock the Article model
-vi.mock("../../models/article.ts", () => ({
+vi.mock("../../models/article.js", () => ({
   Article: {
     find: vi.fn(() => ({
       sort: vi.fn().mockReturnThis(),
@@ -80,9 +81,9 @@ describe("Articles Controller", () => {
   describe("getArticleById", () => {
     it("should return article when found", async () => {
       const mockArticleData = { id: "123", title: "Test Article" };
-      MockedArticle.findById.mockImplementationOnce(() => ({
-        lean: vi.fn().mockResolvedValue(mockArticleData),
-      }));
+      const mockLean = vi.fn().mockResolvedValue(mockArticleData);
+      const mockQuery = { lean: mockLean } as any;
+      MockedArticle.findById.mockReturnValueOnce(mockQuery);
       req.params = { id: "123" };
 
       await getArticleById(req as Request, res as Response);

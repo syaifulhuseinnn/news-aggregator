@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Article } from "../../models/article.ts";
+import { Article } from "../../models/article.js";
 import type { Mock } from "vitest";
 
 // Mock the modules
@@ -25,9 +25,9 @@ vi.mock("node-cron", () => ({
 }));
 
 // Import mocked modules after the vi.mock declarations
-import fetchNewsApi from "../aggregator/newsapi.ts";
-import fetchGuardian from "../aggregator/guardian.ts";
-import { ingestOnce } from "../ingest.ts"; // Import just the function, not default
+import fetchNewsApi from "../aggregator/newsapi.js";
+import fetchGuardian from "../aggregator/guardian.js";
+import { ingestOnce } from "../ingest.js"; // Import just the function, not default
 
 describe("Ingest Service", () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { Article } from "../models/article.ts";
-import { memo } from "../services/cache/memory.ts";
+import { Article } from "../models/article.js";
+import { memo } from "../services/cache/memory.js";
 
 export async function getArticles(req: Request, res: Response) {
   const page = Math.max(1, Number(req.query.page ?? 1));

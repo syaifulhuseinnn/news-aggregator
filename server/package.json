@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"build": "tsc",
-		"start": "node dist/server.js",
-		"dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+		"build": "rm -rf dist && tsc --project tsconfig.json",
+		"start": "node dist/index.js",
+		"dev": "NODE_ENV=development nodemon -x 'node --loader ts-node/esm --no-warnings --experimental-specifier-resolution=node' src/index.ts",
 		"lint": "eslint 'src/**/*.ts'",
 		"test": "vitest"
 	},

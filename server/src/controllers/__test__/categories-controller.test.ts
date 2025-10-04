@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Request, Response } from "express";
-import { getCategories } from "../categories-controller.ts";
-import { Article } from "../../models/article.ts";
-import { memo } from "../../services/cache/memory.ts";
+import { getCategories } from "../categories-controller.js";
+import { Article } from "../../models/article.js";
+import { memo } from "../../services/cache/memory.js";
 
 // Mock needs to be before any imports
-vi.mock("../../models/article.ts", () => ({
+vi.mock("../../models/article.js", () => ({
   Article: {
     distinct: vi.fn(),
   },
 }));
 
-vi.mock("../../services/cache/memory.ts", () => ({
+vi.mock("../../services/cache/memory.js", () => ({
   memo: vi.fn((key, fn) => fn()),
 }));
 

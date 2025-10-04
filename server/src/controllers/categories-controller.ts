@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { Article } from "../models/article.ts";
-import { memo } from "../services/cache/memory.ts";
+import { Article } from "../models/article.js";
+import { memo } from "../services/cache/memory.js";
 
 export async function getCategories(_req: Request, res: Response) {
   try {

@@ -1,7 +1,7 @@
 import cron from "node-cron";
-import fetchNewsApi from "./aggregator/newsapi.ts";
-import { Article } from "../models/article.ts";
-import fetchGuardian from "./aggregator/guardian.ts";
+import fetchNewsApi from "./aggregator/newsapi.js";
+import { Article } from "../models/article.js";
+import fetchGuardian from "./aggregator/guardian.js";
 
 export async function ingestOnce() {
   const promises = [

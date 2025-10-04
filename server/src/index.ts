@@ -1,5 +1,5 @@
-import { CONFIG, MONGODB_URI } from "./config/config.ts";
-import app from "./app.ts";
+import { CONFIG, MONGODB_URI } from "./config/config.js";
+import app from "./app.js";
 import mongoose from "mongoose";
 
 async function main() {
