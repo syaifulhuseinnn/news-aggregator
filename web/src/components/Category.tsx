@@ -25,7 +25,7 @@ export default function Category() {
 	})
 
 	const handleChange = (value: string) => {
-		navigate({ search: prev => ({ ...prev, category: value === "all" ? "" : value, page: undefined }) })
+		navigate({ search: prev => ({ ...prev, category: value === "*" ? undefined : value, page: undefined }) })
 	}
 
 	return (

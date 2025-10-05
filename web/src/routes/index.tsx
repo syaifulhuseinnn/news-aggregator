@@ -11,7 +11,7 @@ import Hero from '@/components/Hero'
 export const Route = createFileRoute('/')({
 	validateSearch: z.object({
 		category: z.string().optional().default("*"),
-		q: z.string().optional().default(""),
+		q: z.string().optional(),
 		page: z.number().min(1).optional().default(1),
 		limit: z.number().min(10).max(50).default(10),
 	}),

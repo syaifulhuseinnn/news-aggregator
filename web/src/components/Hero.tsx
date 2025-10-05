@@ -14,19 +14,36 @@ export default function Hero() {
 
 
 	useEffect(() => {
-
 		if (params.q !== undefined && params.q !== query) {
+			console.log('call 1')
 			setQuery(params.q)
 		}
 
 		if (params.q === undefined && query !== "") {
+			console.log('call 2')
+
 			setQuery("")
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [params.q])
 
 	useEffect(() => {
-		navigate({ search: prev => ({ ...prev, q: debouncedQuery, page: undefined }) })
+		console.log(debouncedQuery)
+		if (debouncedQuery) {
+			console.log('call 3')
+
+			navigate({ search: prev => ({ ...prev, q: debouncedQuery, page: undefined }) })
+			return
+		}
+
+		navigate({
+			search: prev => {
+				const { q, ...rest } = prev as any
+				return rest
+			}
+		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+
 	}, [debouncedQuery, navigate])
 
 	return (
