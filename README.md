@@ -240,24 +240,9 @@ cd server
 npm test
 ```
 
-Tests cover:
-
-- Article ingestion
-- API endpoints
-- Cache behavior
-- Rate limiting
-- Error handling
-
 ### Frontend Tests
 
 ```bash
 cd web
 npm test
 ```
-
-Tests cover:
-
-- Component rendering
-- User interactions
-- API integration
-- Error states
