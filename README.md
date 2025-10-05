@@ -1,75 +1,82 @@
 # News Aggregator
 
-A full-stack news aggregation service that fetches articles from multiple sources, providing a REST API and React frontend with intelligent caching and rate limiting.
+A full-stack news aggregation service that fetches articles from multiple sources (NewsAPI and The Guardian), implements intelligent caching, and provides a clean React frontend.
 
 ## Features
 
 ### Backend
 
-- Aggregates news from multiple sources:
-  - [NewsAPI](https://newsapi.org/)
-  - [The Guardian API](https://open-platform.theguardian.com/)
-- Intelligent caching system using LRU cache
+- Multi-source news aggregation:
+  - NewsAPI integration
+  - The Guardian API integration
+- Intelligent caching system:
+  - LRU in-memory cache
+  - Configurable TTL per endpoint
+  - Automatic cache invalidation
 - MongoDB integration with deduplication
 - Background job to refresh articles every 30 minutes
-- REST API with pagination, search and filtering
 - API rate limiting with exponential backoff
 - Comprehensive test coverage
 
 ### Frontend
 
-- Modern React app built with Vite
+- Modern React SPA with Vite
 - Real-time article search with debouncing
 - Category filtering
-- Responsive article grid layout
-- Client-side caching via React Query
+- Pagination with memory caching
+- Article detail view
 - Loading states and error handling
-- Back navigation and original source links
+- Clean UI with Tailwind CSS
 
 ## Tech Stack
 
-- **Frontend**: React, TanStack Router, TanStack Query, Tailwind CSS
-- **Backend**: Node.js, Express, MongoDB
-- **Testing**: Vitest
-- **Infrastructure**: Docker, Docker Compose
+### Backend
+
+- Node.js with TypeScript
+- Express.js
+- MongoDB
+- LRU Cache
+- Node-cron
+- Jest/Vitest for testing
+
+### Frontend
+
+- React
+- TanStack Router
+- TanStack Query
+- Tailwind CSS
+- Vitest
 
 ## Getting Started
 
 ### Prerequisites
 
-- Docker and Docker Compose _(optional)_
-- MongoDB _(MongoDB Atlas preferred)_
 - Node.js v20+
-- API keys for:
+- Docker and Docker Compose
+- API Keys:
   - [NewsAPI](https://newsapi.org/)
   - [The Guardian](https://open-platform.theguardian.com/)
 
-### Environment Setup
+### Running with Docker
 
-1. Clone the repository:
+1. Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/news-aggregator.git
 cd news-aggregator
 ```
 
-2. Create `.env` file in server directory:
+2. Create `.env` file in root directory:
 
 ```env
-PORT=3001
-NEWS_API_KEY=your_news_api_key
-GUARDIAN_API_KEY=your_guardian_api_key
-MONGODB_URI=your_mongodb_uri
+NEWS_API_KEY=your_newsapi_key
+GUARDIAN_API_KEY=your_guardian_key
 ```
 
-### Running Application with Docker
-
-#### Development Mode
-
-Run the application in development mode with hot-reloading:
+3. Start all services:
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 The following services will be available:
@@ -78,42 +85,36 @@ The following services will be available:
 - Backend API: http://localhost:3001
 - MongoDB: localhost:27017
 
-#### Production Mode
+### Running Locally
 
-Run the application in production mode:
-
-```bash
-docker compose -f docker-compose.prod.yml up --build
-```
-
-The following services will be available:
-
-- Frontend: http://localhost
-- Backend API: http://localhost:3001
-- MongoDB: localhost:27017
-
-#### Stopping the Application
+1. Clone the repository
 
 ```bash
-# Development
-docker compose down
-
-# Production
-docker compose -f docker-compose.prod.yml down
+git clone https://github.com/yourusername/news-aggregator.git
+cd news-aggregator
 ```
 
-To remove all data (including MongoDB data):
+**Backend**
 
-```bash
-docker compose down -v
-```
-
-### Running Development Locally
-
-1. Start MongoDB:
+1. Start MongoDB container:
 
 ```bash
 docker compose up mongodb -d
+```
+
+2. Environment setup
+
+```bash
+cd server
+```
+
+Create `.env` file in server directory
+
+```env
+PORT=3001
+NEWS_API_KEY=your_news_api_key
+GUARDIAN_API_KEY=your_guardian_api_key
+MONGODB_URI=your_mongodb_uri
 ```
 
 2. Start backend:
@@ -124,6 +125,22 @@ npm install
 npm run dev
 ```
 
+Backend accessible via http://localhost:3001
+
+**Frontend**
+
+1. Environment setup
+
+```bash
+cd web
+```
+
+Create `.env` file in web directory
+
+```env
+VITE_BASE_URL_API=http://localhost:3001
+```
+
 3. Start frontend:
 
 ```bash
@@ -131,6 +148,8 @@ cd web
 npm install
 npm run dev
 ```
+
+Frontend accessible via http://localhost:3000
 
 ## API Documentation
 
@@ -179,24 +198,28 @@ Get single article by ID.
 
 Get list of available categories.
 
+> **Assumption**
+> I assume endpoint `/api/health` means get articles from health category. Since `/api/articles` has capability to get articles by category by add query param, I don't create endpoint `/api/health`
+
 ## Architecture
 
 ### Caching Strategy
 
-1. **Backend Caching**:
+#### Backend Caching
 
 - In-memory LRU cache for API responses
 - Configurable TTL per endpoint
 - Automatic cache invalidation on new article ingestion
 - MongoDB query optimization
 
-2. **Frontend Caching**:
+#### Frontend Caching
 
-- React Query cache with configurable stale time
-- Automatic background refetching
-- Cache invalidation on mutations
+- React Query for data synchronization
+- Configurable stale time
+- Background refetching
+- Optimistic updates
 
-### API Rate Limiting
+### Rate Limiting
 
 - Exponential backoff with jitter
 - Configurable retry attempts
@@ -217,6 +240,14 @@ cd server
 npm test
 ```
 
+Tests cover:
+
+- Article ingestion
+- API endpoints
+- Cache behavior
+- Rate limiting
+- Error handling
+
 ### Frontend Tests
 
 ```bash
@@ -224,74 +255,9 @@ cd web
 npm test
 ```
 
-## Project Structure
+Tests cover:
 
-```
-├── server/                # Backend Node.js server
-│   ├── src/
-│   │   ├── controllers/  # Request handlers
-│   │   ├── models/       # Database models
-│   │   ├── routes/       # API routes
-│   │   ├── services/     # Business logic
-│   │   └── utils/        # Helper functions
-│   └── tests/
-├── web/                   # Frontend React app
-│   ├── src/
-│   │   ├── components/   # React components
-│   │   ├── routes/       # Route components
-│   │   ├── lib/         # Utilities
-│   │   └── hooks/       # Custom hooks
-│   └── tests/
-└── docker-compose.yml    # Docker configuration
-```
-
-## Development
-
-### Code Style
-
-The project uses ESLint and Prettier for code formatting:
-
-```bash
-# Backend
-cd server
-npm run lint
-
-# Frontend
-cd web
-npm run lint
-```
-
-### Adding New Features
-
-1. **New API Endpoint**:
-
-- Add route in `server/src/routes`
-- Create controller in `server/src/controllers`
-- Add tests in `__test__` directory
-
-2. **New Frontend Feature**:
-
-- Add route in `web/src/routes`
-- Create components in `web/src/components`
-- Add tests for components
-
-## Production Deployment
-
-The application is containerized and ready for production deployment:
-
-- Multi-stage Docker builds for optimal image size
-- Nginx reverse proxy for frontend
-- Environment variable injection
-- Health checks and automatic restarts
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Component rendering
+- User interactions
+- API integration
+- Error states

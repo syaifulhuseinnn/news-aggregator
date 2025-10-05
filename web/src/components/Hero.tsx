@@ -12,13 +12,13 @@ export default function Hero() {
 	const navigate = useNavigate({ from: Route.fullPath })
 	const params = Route.useSearch()
 
-	// Sync local input when the route's `q` changes externally (e.g. back/forward)
+
 	useEffect(() => {
-		// only update if different and not currently typing (prevents clobber)
+
 		if (params.q !== undefined && params.q !== query) {
 			setQuery(params.q)
 		}
-		// if route cleared q, reflect that too
+
 		if (params.q === undefined && query !== "") {
 			setQuery("")
 		}
@@ -26,11 +26,6 @@ export default function Hero() {
 	}, [params.q])
 
 	useEffect(() => {
-		if (debouncedQuery === "") {
-			navigate({ search: prev => ({ ...prev, q: undefined, page: undefined }) })
-			return
-		}
-
 		navigate({ search: prev => ({ ...prev, q: debouncedQuery, page: undefined }) })
 	}, [debouncedQuery, navigate])
 

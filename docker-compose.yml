@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=news_aggregator
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/news_aggregator
+      - NODE_ENV=development
+      - NEWS_API_KEY=${NEWS_API_KEY}
+      - GUARDIAN_API_KEY=${GUARDIAN_API_KEY}
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./web:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3001
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_HOST=0.0.0.0
+      - WDS_SOCKET_PORT=3000
+    depends_on:
+      - server
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:

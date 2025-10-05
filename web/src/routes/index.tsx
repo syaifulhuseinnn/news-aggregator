@@ -11,12 +11,12 @@ import Hero from '@/components/Hero'
 export const Route = createFileRoute('/')({
 	validateSearch: z.object({
 		category: z.string().optional().default("*"),
-		q: z.string().optional(),
+		q: z.string().optional().default(""),
 		page: z.number().min(1).optional().default(1),
-		limit: z.number().min(10).max(100).default(10),
+		limit: z.number().min(10).max(50).default(10),
 	}),
 	search: {
-		middlewares: [stripSearchParams({ page: 1, limit: 10, category: "*" })],
+		middlewares: [stripSearchParams({ page: 1, limit: 10, category: "*", q: "" })],
 	},
 	component: App,
 })
